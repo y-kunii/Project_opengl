@@ -3,12 +3,15 @@
 #include "glut.h"
 
 #include "font.h"
+#include "Rect.h"
 
 using namespace glm;
 
 ivec2 windowSize = {800,600};
 
 bool keys[256];
+
+Rect rect = Rect(vec2(100, 100), vec2(100, 100));
 
 void display(void){
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -25,41 +28,48 @@ void display(void){
 	glMatrixMode(GL_MODELVIEW);//(GLenum mode);
 	glLoadIdentity();
 
-	glTranslatef(
-		windowSize .x/2,//(GLfloat x,
-		windowSize .y/2,//GLfloat y,
-		0//GLfloat z);
-	);
+//	glTranslatef(
+//		windowSize .x/2,//(GLfloat x,
+//		windowSize .y/2,//GLfloat y,
+//		0//GLfloat z);
+//	);
+//
+//	static float angle;
+//	//angle += 1;
+//	if (keys['d'])
+//		angle += 1;
+//	if (keys['a'])
+//		angle -= 1;
+//	glRotatef(
+//		angle,
+//		0, 0, 1);//GLfloat angle, GLfloat x, GLfloat y, GLfloat z
+//	
+//	glScalef(
+//		256,//GLfloat x,
+//		256,//GLfloat y,
+//		1//GLfloat z);
+//	);
+//	glutWireTeapot(1);// GLdouble size
 
-	static float angle;
-	//angle += 1;
-	if (keys['d'])
-		angle += 1;
-	if (keys['a'])
-		angle -= 1;
-	glRotatef(
-		angle,
-		0, 0, 1);//GLfloat angle, GLfloat x, GLfloat y, GLfloat z
-	
-	glScalef(
-		256,//GLfloat x,
-		256,//GLfloat y,
-		1//GLfloat z);
-	);
-	glutWireTeapot(1);// GLdouble size
+	rect.Draw();
 
 	fontBegin();
 	fontSetColor(0,0xff,0x00);
 	fontSetPosition(0,windowSize.y - fontgetSize()*1.5);
 	fontSetSize(FONT_DEFAULT_SIZE/2);
-	fontDraw("angle:%f", angle);
+//	fontDraw("angle:%f", angle);
 	fontEnd();
 
 	glutSwapBuffers();
 }
 
 void timer(int value) {
-	glutPostRedisplay();
+	float f = 2;
+	if (keys['w']) rect.m_position.y -= f;
+	if (keys['s']) rect.m_position.y += f;
+	if (keys['a']) rect.m_position.x -= f;
+	if (keys['d']) rect.m_position.x += f;
+					glutPostRedisplay();
 	glutTimerFunc(
 		1000/60,//(unsigned int millis
 		timer,//void (GLUTCALLBACK *func)(int value),
